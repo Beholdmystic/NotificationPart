@@ -27,18 +27,6 @@ const notificationValidation = () => {
 
 const editNotificationValidation = () => {
   return [
-    body("receiver")
-      .optional()
-      .custom((value) => {
-        return User.findById(value).then((user) => {
-          if (user) {
-            return Promise.reject("Id is already in use");
-          }
-        });
-      })
-      .isLength({ min: 4 })
-      .withMessage("Receiver name must be at least 4 charcter long."),
-
     body("message")
       .optional()
       .isString()
