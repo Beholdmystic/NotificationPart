@@ -152,4 +152,35 @@ router.put(
   }
 );
 
+//to find wether the customer have read the notification or not
+router.put("/read/:id", async (req, res) => {
+  const id = req.params.id;
+  Notification.findById(id, (error, notification) => {
+    if (error) {
+      return res.status(400).send({
+        status: "error",
+        message: "Wrong, Please check and do it again",
+      });
+    }
+    if (!notification) {
+      return res.status(400).send({
+        status: "fail",
+        data: { notification: "No notification exist" },
+      });
+    }
+    notification.read = Date.now();
+
+    notification.save((error, result) => {
+      if (error) {
+        return res
+          .status(400)
+          .send({ status: "error", message: error.message });
+      }
+      return res
+        .status(200)
+        .send({ status: "success", data: { notification: "read" } });
+    });
+  });
+});
+
 module.exports = router;
